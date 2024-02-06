@@ -9,12 +9,12 @@ const Router = () => {
 
   console.log(route);
 
-//  useEffect(() => {
-    //handleRouteUrl("TV");
+  useEffect(() => {
+    handleRouteUrl("TV");
     //handleRouteUrl("films");
     //handleRouteUrl("kids");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-//  }, [])
+  }, [])
 
   return (
     <div>
