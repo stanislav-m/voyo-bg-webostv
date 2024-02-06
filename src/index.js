@@ -1,10 +1,15 @@
 /* global ENACT_PACK_ISOMORPHIC */
-import {createRoot, hydrateRoot} from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import GlobalState from './components/GlobalContex/GlobalContext';
 
-const appElement = (<App />);
+const appElement = (
+	<GlobalState>
+		<App />
+	</GlobalState>
+);
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {

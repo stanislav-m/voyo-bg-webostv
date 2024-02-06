@@ -1,25 +1,28 @@
 import { useEffect, useContext } from 'react';
 import { GlobalContext } from "../GlobalContex/GlobalContext";
 import OverviewList from "../../views/OverviewList";
+import TVList from "../../views/TVList";
+import CategList from '../../views/CategList';
 
 const Router = () => {
-    const {route, handleRouteUrl } = useContext(GlobalContext);
+  const { route, handleRouteUrl } = useContext(GlobalContext);
 
-    useEffect(() => {
-      console.log("router setup");
-      handleRouteUrl("overview");
-      return () => {
-        console.log("router cleanup");
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    })
-    console.log(route);
+  console.log(route);
 
-    return (
-        <div>
-        { route === "overview" && <OverviewList />  }
-        </div>
-    );
+//  useEffect(() => {
+    //handleRouteUrl("TV");
+    //handleRouteUrl("films");
+    //handleRouteUrl("kids");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+//  }, [])
+
+  return (
+    <div>
+      {route === "overview" && <OverviewList />}
+      {route === "TV" && <TVList />}
+      {["films", "series", "more", "kids", "concenrts"].indexOf(route) > -1 && <CategList />}
+    </div>
+  );
 };
 
 export default Router;
