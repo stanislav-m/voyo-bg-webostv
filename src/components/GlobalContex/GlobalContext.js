@@ -1,34 +1,40 @@
 import { createContext, useState } from "react";
 
-export const GlobalContext = createContext({
+const initVal = {
   route: "",
-  handleRouteUrl: () => {},
-  dataList: [],
+  dataList: []
+};
+
+export const GlobalContext = createContext({
+  handleRouteUrl: () => { },
+  initVal,
 });
 
 const GlobalState = ({ children }) => {
-  const [route, setRoute] = useState("");
-  const [dataList, setDataList] = useState([]);
+  const [voyoState, setvoyoState] = useState(initVal);
 
   const handleRouteUrl = async (route_url) => {
     const opts = {
       mode: "cors",
     };
-    console.log(route_url);
 
     const route_des = {
-      "overview":"overview",
-      "TV" : "tv",
+      "overview": "overview",
+      "TV": "tv",
       "films": "content/filter?category=20344",
-      "series":"content/filter?category=20345",
-      "more":"content/filter?category=20346",
-      "kids":"content/filter?category=20411",
-      "concenrts":"content/filter?category=20404",
+      "series": "content/filter?category=20345",
+      "shows": "content/filter?category=20346",
+      "kids": "content/filter?category=20411",
+      "concerts": "content/filter?category=20404",
     }
 
     let dest = null;
-    if (route_url === "") {
-      console.log("setroute empty");
+    if (route_url === "" || route_url === "test") {
+      const voyo = {
+        route: route_url,
+        dataList: null,
+      }
+      setvoyoState(voyo);
       return;
     }
     dest = route_des[route_url];
@@ -37,16 +43,16 @@ const GlobalState = ({ children }) => {
     const responce = await fetch(`${url}${path}${dest}`, opts);
     const data = await responce.json();
     if (data) {
-      console.log("set data", route_url);
-      setDataList(data);
+      const voyo = {
+        route: route_url,
+        dataList: data,
+      }
+      setvoyoState(voyo);
     }
-    setRoute(route_url);
-    console.log("set route", route_url);
   };
   const contextValue = {
-    route,
     handleRouteUrl,
-    dataList,
+    voyoState
   };
 
   return (

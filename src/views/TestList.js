@@ -2,19 +2,16 @@ import { VirtualGridList } from '@enact/sandstone/VirtualList';
 import ri from '@enact/ui/resolution';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
+import TestItem from './TestItem';
 
-import ShowItem from './ShowItem';
-
-const ShowList = ({ imageitems, ...rest }) => {
+const TestList = ({ imageitems, ...rest }) => {
 	const renderItem = useCallback(({ ...props }) => {
-		const { id, title, image, type, url } = imageitems[props.index];
+		const { id, name, cap } = imageitems[props.index];
 		return (
-			<ShowItem {...props}
+			<TestItem {...props}
 				id={id}
-				title={title}
-				image={image}
-				type={type}
-				url={url}
+				name={name}
+				cap={cap}
 			/>)
 	}
 	, [imageitems]);
@@ -31,9 +28,10 @@ const ShowList = ({ imageitems, ...rest }) => {
 	);
 };
 
-ShowList.propTypes = {
+TestList.propTypes = {
 	dispatch: PropTypes.func,
 	imageitems: PropTypes.array,
 };
 
-export default ShowList;
+export default TestList;
+

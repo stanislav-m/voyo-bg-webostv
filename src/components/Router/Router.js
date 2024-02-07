@@ -1,26 +1,19 @@
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { GlobalContext } from "../GlobalContex/GlobalContext";
 import OverviewList from "../../views/OverviewList";
 import TVList from "../../views/TVList";
 import CategList from '../../views/CategList';
+import Test_l from '../../views/Test_l';
 
 const Router = () => {
-  const { route, handleRouteUrl } = useContext(GlobalContext);
-
-  console.log(route);
-
-  useEffect(() => {
-    handleRouteUrl("TV");
-    //handleRouteUrl("films");
-    //handleRouteUrl("kids");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { voyoState} = useContext(GlobalContext);
 
   return (
     <div>
-      {route === "overview" && <OverviewList />}
-      {route === "TV" && <TVList />}
-      {["films", "series", "more", "kids", "concenrts"].indexOf(route) > -1 && <CategList />}
+      {voyoState.route === "overview" && <OverviewList />}
+      {voyoState.route === "TV" && <TVList />}
+      {["films", "series", "shows", "kids", "concenrts"].indexOf(voyoState.route) > -1 && <CategList />}
+      {voyoState.route === "test" && <Test_l />}
     </div>
   );
 };

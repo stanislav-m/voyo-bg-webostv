@@ -19,7 +19,7 @@ const TvsList = ({imageitems, ...rest}) => {
             nextitle = title;
         }
         return  (<TvItem {...props} name={name} logo={logo} current={curTitle} next={nextitle} />) }
-    , []);
+    , [imageitems]);
 
 	delete rest.dispatch;
 

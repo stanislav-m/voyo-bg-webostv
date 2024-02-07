@@ -5,8 +5,9 @@ import TvsList from './TvsList';
 import css from './TVList.module.less';
 
 const TVList = () => {
-  const { dataList } = useContext(GlobalContext);
-  const { liveTvs} = dataList;
+  const { voyoState } = useContext(GlobalContext);
+  const { liveTvs} = voyoState.dataList;
+
   const scrollToRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const TVList = () => {
   }, []);
 
   return (
-      <div className={css.overviewList}>
+      <div className={css.list}>
         <TvsList imageitems={liveTvs}
           cbScrollTo={getScrollTo}
           className={css.list}

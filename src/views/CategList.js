@@ -5,9 +5,9 @@ import ShowList from './ShowList';
 import css from './CategList.module.less';
 
 const CategList = () => {
-  const { dataList } = useContext(GlobalContext);
-  const { found_rows, items} = dataList;
-  //console.log(dataList);
+  const { voyoState} = useContext(GlobalContext);
+  const { found_rows, items } = voyoState.dataList;
+
   const scrollToRef = useRef(null);
 
   useEffect(() => {
@@ -26,11 +26,11 @@ const CategList = () => {
   }, []);
 
   return (
-      <div className={css.overviewList}>
-        <ShowList imageitems={items}
-          cbScrollTo={getScrollTo}
-          className={css.list}
-        /></div>
+    <div className={css.list}>
+      <ShowList imageitems={items} total={Number(found_rows)}
+        cbScrollTo={getScrollTo}
+        className={css.list}
+      /></div>
   );
 
 };
