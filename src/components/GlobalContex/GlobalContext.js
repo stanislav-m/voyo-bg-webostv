@@ -51,7 +51,7 @@ const GlobalState = ({ children }) => {
     const responce = await fetch(`${url}${path}${dest}${pg}`, opts);
     const data = await responce.json();
     if (data) {
-      if (page < 2 && route_url !== voyoState.route) {
+      if ( (page === 0) || ((page < 2) && (route_url !== voyoState.route) )) {
         const voyo = {
           route: route_url,
           dataList: data,

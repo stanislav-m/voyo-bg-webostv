@@ -2,6 +2,8 @@ import { useContext, useCallback, useEffect, useRef } from "react";
 import { GlobalContext } from "../components/GlobalContex";
 import TvsList from "./TvsList";
 import ShowList from "./ShowList";
+import BodyText from '@enact/sandstone/BodyText';
+import VirtualList from '@enact/sandstone/VirtualList';
 
 import css from "./OverviewList.module.less";
 
@@ -26,11 +28,19 @@ const OverviewList = () => {
     scrollToRef.current = scrollTo;
   }, []);
 
-  return (
+  const wordWrap = (str, max, br = '\n') => str.replace(
+    new RegExp(`(?![^\\n]{1,${max}}$)([^\\n]{1,${max}})\\s`, 'g'), '$1' + br
+  );
+  
+   return (
     <div className={css.overviewList}>
       <div className={css.content}>
+        <BodyText size='small'>
+          ТВ Канали
+        </BodyText>
         <TvsList
           imageitems={liveTvs}
+          direction="horizontal"
           cbScrollTo={getScrollTo}
           className={css.list}
         />
@@ -39,9 +49,12 @@ const OverviewList = () => {
         ? sections.map((it) => (
             <div className={css.content}
               key={it.id}>
-              <h2>{it.name}</h2>
+              <BodyText size='small'>
+                {wordWrap(it.name, 11)}
+              </BodyText>
               <ShowList
                 imageitems={it.content}
+                direction="horizontal"
                 total={it.content.length}
                 cbScrollTo={getScrollTo}
                 className={css.list}
