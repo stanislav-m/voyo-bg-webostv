@@ -1,11 +1,15 @@
 import { VirtualGridList } from '@enact/sandstone/VirtualList';
 import ri from '@enact/ui/resolution';
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
+import { GlobalContext } from "../components/GlobalContex/GlobalContext";
 
 import ShowItem from './ShowItem';
 
-const ShowList = ({ imageitems, ...rest }) => {
+const ShowList = ({ imageitems, total, ...rest }) => {
+	const { voyoState, handleRouteUrl } = useContext(GlobalContext);
+	console.log(voyoState.route, imageitems.length, total);
+
 	const renderItem = useCallback(({ ...props }) => {
 		const { id, title, image, type, url } = imageitems[props.index];
 		return (
@@ -17,7 +21,15 @@ const ShowList = ({ imageitems, ...rest }) => {
 				url={url}
 			/>)
 	}
-	, [imageitems]);
+		, [imageitems]);
+
+	const ScrollStop = useCallback(({moreInfo}) => {
+		const { lastVisibleIndex } = moreInfo;
+		console.log(lastVisibleIndex, imageitems.length, total);
+		if ( (lastVisibleIndex === imageitems.length - 1) && (imageitems.length < total)) {
+			handleRouteUrl(voyoState.route, imageitems.length/24 + 1);
+		}
+	}, [imageitems.length, handleRouteUrl, voyoState.route, total]);
 
 	delete rest.dispatch;
 
@@ -26,7 +38,8 @@ const ShowList = ({ imageitems, ...rest }) => {
 			{...rest}
 			dataSize={imageitems.length}
 			itemRenderer={renderItem}
-			itemSize={{minHeight: ri.scale(570), minWidth: ri.scale(688)}}
+			itemSize={{ minHeight: ri.scale(410*2), minWidth: ri.scale(284*2) }}
+			onScrollStop={ScrollStop}
 		/>
 	);
 };

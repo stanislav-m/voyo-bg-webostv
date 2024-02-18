@@ -8,34 +8,33 @@ const MainPanel = (props) => {
 	const { handleRouteUrl } = useContext(GlobalContext);
 
 	useEffect(() => {
-		handleRouteUrl("TV");
+		handleRouteUrl("TV", 0);
 	},
 		// eslint-disable-next-line
 		[])
 	const tab_names = useMemo(() => {
 		const _tab_names = [
-			{ id: 0, name: "TV", icon: "speakercenter" },
-			{ id: 1, name: "kids", icon: "googlephotos" },
-			{ id: 2, name: "shows", icon: "r2rappcall" },
-			{ id: 3, name: "series", icon: "bookmark" },
-			{ id: 4, name: "films", icon: "recording" },
-			{ id: 5, name: "test", icon: "guide" },
+			{ id: 0, name: "TV", icon: "speakercenter", page: 0 },
+			{ id: 1, name: "kids", icon: "googlephotos", page: 1 },
+			{ id: 2, name: "shows", icon: "r2rappcall", page: 1 },
+			{ id: 3, name: "series", icon: "bookmark", page: 1 },
+			{ id: 4, name: "films", icon: "recording", page: 1 },
+			{ id: 5, name: "sport", icon: "soccer", page: 1 },
+			{ id: 6, name: "concerts", icon: "music", page: 1 },
 		];
 		return _tab_names;
 	}, []);
 
 	const tabSelected = useCallback(({ index }) => {
-		handleRouteUrl(tab_names[index].name);
+		handleRouteUrl(tab_names[index].name, tab_names[index].page);
 	}, [handleRouteUrl, tab_names]);
 
 	return (
 		<Panel {...props}>
-			<Header noCloseButton title="Voyo" />
+			{/*<Header noCloseButton title="Voyo" />*/}
 			<TabLayout
 				onSelect={tabSelected}
-				//onTabAnimationEnd={function noRefCheck() { }}
 				orientation="vertical"
-				tabSize={20}
 			>
 				{
 					tab_names.map((item) => (

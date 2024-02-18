@@ -28,7 +28,7 @@ const TvsList = ({imageitems, ...rest}) => {
 			{...rest}
 			dataSize={imageitems.length}
 			itemRenderer={renderItem}
-			itemSize={{minHeight: ri.scale(570), minWidth: ri.scale(688)}}
+			itemSize={{minHeight: ri.scale(326*2), minWidth: ri.scale(344*2)}}
 		/>
 	);
 };
