@@ -8,19 +8,21 @@ const MainPanel = (props) => {
 	const { handleRouteUrl } = useContext(GlobalContext);
 
 	useEffect(() => {
-		handleRouteUrl("TV", 0);
+		handleRouteUrl("overview", 0);
 	},
 		// eslint-disable-next-line
 		[])
 	const tab_names = useMemo(() => {
 		const _tab_names = [
-			{ id: 0, name: "TV", icon: "speakercenter", page: 0 },
-			{ id: 1, name: "kids", icon: "googlephotos", page: 1 },
-			{ id: 2, name: "shows", icon: "r2rappcall", page: 1 },
-			{ id: 3, name: "series", icon: "bookmark", page: 1 },
-			{ id: 4, name: "films", icon: "recording", page: 1 },
-			{ id: 5, name: "sport", icon: "soccer", page: 1 },
-			{ id: 6, name: "concerts", icon: "music", page: 1 },
+			{ id: 0, name: "overview", icon: "home", page: 0 },
+			{ id: 1, name: "TV", icon: "speakercenter", page: 0 },
+			{ id: 2, name: "kids", icon: "googlephotos", page: 1 },
+			{ id: 3, name: "shows", icon: "r2rappcall", page: 1 },
+			{ id: 4, name: "series", icon: "bookmark", page: 1 },
+			{ id: 5, name: "films", icon: "recording", page: 1 },
+			{ id: 6, name: "sport", icon: "soccer", page: 1 },
+			{ id: 7, name: "live sport", icon: "football", page: 0 },
+			{ id: 8, name: "concerts", icon: "music", page: 1 },
 		];
 		return _tab_names;
 	}, []);

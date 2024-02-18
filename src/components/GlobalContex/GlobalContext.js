@@ -3,11 +3,11 @@ import { createContext, useState } from "react";
 const initVal = {
   route: "",
   dataList: [],
-  page: 0
+  page: 0,
 };
 
 export const GlobalContext = createContext({
-  handleRouteUrl: () => { },
+  handleRouteUrl: () => {},
   initVal,
 });
 
@@ -20,24 +20,24 @@ const GlobalState = ({ children }) => {
     };
     console.log(route_url, page);
     const route_des = {
-      "overview": "overview",
-      "TV": "tv",
-      "films": "content/filter?category=20344&sort=date-desc&page=",
-      "series": "content/filter?category=20345&sort=date-desc&page=",
-      "shows": "content/filter?category=20346&page=",
-      "kids": "content/filter?category=20411&page=",
-      "concerts": "content/filter?category=20404&page=",
-      "sport": "content/filter?category=20378&page=",
-    }
-    //"sport": "content/filter?category=20408",
+      overview: "overview",
+      TV: "tv",
+      films: "content/filter?category=20344&sort=date-desc&page=",
+      series: "content/filter?category=20345&sort=date-desc&page=",
+      shows: "content/filter?category=20346&page=",
+      kids: "content/filter?category=20411&page=",
+      concerts: "content/filter?category=20404&page=",
+      sport: "content/filter?category=20378&page=",
+      "live sport": "content/filter?category=20408",
+    };
 
     let dest = null;
     if (route_url === "") {
       const voyo = {
         route: route_url,
         dataList: null,
-        page: 0
-      }
+        page: 0,
+      };
       setvoyoState(voyo);
       return;
     }
@@ -51,21 +51,21 @@ const GlobalState = ({ children }) => {
     const responce = await fetch(`${url}${path}${dest}${pg}`, opts);
     const data = await responce.json();
     if (data) {
-      if ((page < 2) && (route_url !== voyoState.route)) {
+      if (page < 2 && route_url !== voyoState.route) {
         const voyo = {
           route: route_url,
           dataList: data,
-          page: page
-        }
+          page: page,
+        };
         console.log(voyo);
         setvoyoState(voyo);
       } else {
         let voyo = {
           route: route_url,
           dataList: voyoState.dataList,
-          page: page
-        }
-        if (page > (voyoState.dataList.items.length / 24)) {
+          page: page,
+        };
+        if (page > voyoState.dataList.items.length / 24) {
           for (let idx = 0; idx < data.items.length; ++idx) {
             voyo.dataList.items.push(data.items[idx]);
           }
@@ -77,7 +77,7 @@ const GlobalState = ({ children }) => {
   };
   const contextValue = {
     handleRouteUrl,
-    voyoState
+    voyoState,
   };
 
   return (

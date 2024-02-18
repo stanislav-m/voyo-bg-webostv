@@ -13,7 +13,7 @@ const Router = () => {
     <div className={css.content}>
       {voyoState.route === "overview" && <OverviewList />}
       {voyoState.route === "TV" && <TVList />}
-      {["films", "series", "shows", "kids", "concerts", "sport"].indexOf(voyoState.route) > -1 && <CategList />}
+      {["films", "series", "shows", "kids", "concerts", "sport", "live sport"].indexOf(voyoState.route) > -1 && <CategList />}
     </div>
   );
 };
