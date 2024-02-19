@@ -20,7 +20,7 @@ const GlobalState = ({ children }) => {
     };
     console.log(route_url, page);
     const route_des = {
-      overview: "overview",
+      home: "overview",
       TV: "tv",
       films: "content/filter?category=20344&sort=date-desc&page=",
       series: "content/filter?category=20345&sort=date-desc&page=",
@@ -29,10 +29,11 @@ const GlobalState = ({ children }) => {
       concerts: "content/filter?category=20404&page=",
       sport: "content/filter?category=20378&page=",
       "live sport": "content/filter?category=20408",
+      search: "search?query=<search string>&orderBy=default&page="
     };
 
     let dest = null;
-    if (route_url === "") {
+    if (route_url === "" || route_url === "test") {
       const voyo = {
         route: route_url,
         dataList: null,

@@ -29,7 +29,7 @@ const TVList = () => {
       <div className={css.list}>
         <TvsList imageitems={liveTvs}
           cbScrollTo={getScrollTo}
-          className={css.list}
+          //className={css.list}
         /></div>
   );
 

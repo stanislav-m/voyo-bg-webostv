@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo, useEffect } from "react";
-import { Panel, Header } from '@enact/sandstone/Panels';
+import { Panel } from '@enact/sandstone/Panels';
 import { TabLayout, Tab } from '@enact/sandstone/TabLayout';
 import { GlobalContext } from "../components/GlobalContex";
 import Router from '../components/Router';
@@ -14,7 +14,7 @@ const MainPanel = (props) => {
 		[])
 	const tab_names = useMemo(() => {
 		const _tab_names = [
-			{ id: 0, name: "overview", icon: "home", page: 0 },
+			{ id: 0, name: "home", icon: "home", page: 0 },
 			{ id: 1, name: "TV", icon: "speakercenter", page: 0 },
 			{ id: 2, name: "kids", icon: "googlephotos", page: 1 },
 			{ id: 3, name: "shows", icon: "r2rappcall", page: 1 },
