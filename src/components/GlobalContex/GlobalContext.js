@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import LS2Request from '@enact/webos/LS2Request';
 
 const initVal = {
   route: "",
@@ -7,12 +8,28 @@ const initVal = {
 };
 
 export const GlobalContext = createContext({
-  handleRouteUrl: () => {},
+  handleRouteUrl: () => { },
   initVal,
 });
 
 const GlobalState = ({ children }) => {
   const [voyoState, setvoyoState] = useState(initVal);
+
+  const getUrl = async (url) => {
+    // to cancel a request you must store a reference
+    console.log("getUrl", url);
+    const req = new LS2Request().send({
+      service: 'luna://com.voyo.bg.service',
+      method: 'url_get',
+      parameters: {
+        url: url
+      },
+      onSuccess: (res) => {
+        console.log(res.data);
+        return res.data;
+      }
+    });
+  }
 
   const handleRouteUrl = async (route_url, page) => {
     const opts = {
@@ -43,16 +60,18 @@ const GlobalState = ({ children }) => {
       return;
     }
     dest = route_des[route_url];
-    const url = `http://localhost:5000`;
+    const real_url = `https://napi.voyo.bg`
     const path = `/api/bg/v1/`;
     let pg = "";
     if (page > 0) {
       pg = pg + page;
     }
-    const responce = await fetch(`${url}${path}${dest}${pg}`, opts);
-    const data = await responce.json();
+    const data = await getUrl(`${real_url}${path}${dest}${pg}`);
+    //const url = `http://localhost:5000`;
+    //const responce = await fetch(`${url}${path}${dest}${pg}`, opts);
+    //const data = await responce.json();
     if (data) {
-      if ( (page === 0) || ((page < 2) && (route_url !== voyoState.route) )) {
+      if ((page === 0) || ((page < 2) && (route_url !== voyoState.route))) {
         const voyo = {
           route: route_url,
           dataList: data,

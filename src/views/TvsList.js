@@ -29,6 +29,7 @@ const TvsList = ({imageitems, ...rest}) => {
 			dataSize={imageitems.length}
 			itemRenderer={renderItem}
 			itemSize={{minHeight: ri.scale(326*2), minWidth: ri.scale(344*2)}}
+            hoverToScroll
 		/>
 	);
 };

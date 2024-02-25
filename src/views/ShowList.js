@@ -40,6 +40,7 @@ const ShowList = ({ imageitems, total, ...rest }) => {
 			itemRenderer={renderItem}
 			itemSize={{ minHeight: ri.scale(410*2), minWidth: ri.scale(284*2) }}
 			onScrollStop={ScrollStop}
+			hoverToScroll
 		/>
 	);
 };

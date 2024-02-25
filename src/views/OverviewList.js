@@ -64,6 +64,7 @@ const OverviewList = () => {
       dataSize={sections.length + 1}
       itemRenderer={renderItem}
       itemSize={ri.scale(510 * 2)}
+      hoverToScroll
       cbScrollTo={getScrollTo}
     />
   );

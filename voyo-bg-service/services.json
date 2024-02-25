@@ -1,0 +1,9 @@
+{
+  "id": "com.voyo.bg.service",
+  "description": "VOYO Service",
+  "services": [
+    {
+      "name": "com.voyo.bg.service"
+    }
+  ]
+}
