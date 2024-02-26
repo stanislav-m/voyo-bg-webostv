@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "VOYO Service",
   "main": "voyo_service.js",
-    "scripts": {
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "sTa",
   "license": "BSD",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "axios": "^1.6.7"
   }
 }

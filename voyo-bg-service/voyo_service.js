@@ -3,7 +3,7 @@ var Service = require('webos-service');
 var service = new Service(pkgInfo.name);
 var greeting = "Hello, World!";
 
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 // a method that always returns the same value
 service.register("hello", function(message) {
@@ -36,17 +36,27 @@ service.register("url_get", async function(message) {
 	console.log("In url_get callback");
 	if (message.payload.url) {
 		console.log('fetching', message.payload.url);
-		const responce = await fetch(message.payload.url);
-		const data = await responce.json();
-		message.respond({
+		axios.get(message.payload.url)
+		.then(res => {
+		  console.log('Status Code:', res.status);
+		  console.log('data:', res.data);
+		  message.respond({
 			returnValue: true,
-			data : data
+			data : res.data
+			});
+		})
+		.catch(err => {
+		  console.log('Error: ', err.message);
+		  message.respond({
+			returnValue: false,
+			errorText: err.message,
+			errorCode: 1
 		});
-		console.log('data:', data);
-		} else {
+	});
+	} else {
 		message.respond({
 			returnValue: false,
-			errorText: "argument 'url' is required",
+			errorText: err.message,
 			errorCode: 1
 		});
 	}
