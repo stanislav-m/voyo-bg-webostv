@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
 import LS2Request from "@enact/webos/LS2Request";
-//import platform from '@enact/core/platform';
-//import application from '@enact/webos/application';
+//import deviceinfo from '@enact/webos/deviceinfo';
 
 const initVal = {
   route: "",
@@ -16,12 +15,12 @@ export const GlobalContext = createContext({
 
 const GlobalState = ({ children }) => {
   const [voyoState, setvoyoState] = useState(initVal);
-
-  //let app_id = fetchAppId();
-  //console.log("application: ", app_id.);
-  //let platfm = platform.detect();
-  //console.log("running on platform:", platform.platform, platfm);
-
+/*
+  const devInfo = (info) => {
+    console.log(info);
+  }
+  deviceinfo(devInfo);
+*/
   const processData = (data, page, route_url) => {
     console.log("handleRouteUrl", data);
     if (data) {
