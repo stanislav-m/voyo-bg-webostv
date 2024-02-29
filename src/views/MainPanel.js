@@ -3,12 +3,15 @@ import { Panel } from '@enact/sandstone/Panels';
 import { TabLayout, Tab } from '@enact/sandstone/TabLayout';
 import { GlobalContext } from "../components/GlobalContex";
 import Router from '../components/Router';
+import deviceinfo from '@enact/webos/deviceinfo';
 
 const MainPanel = (props) => {
-	const { handleRouteUrl } = useContext(GlobalContext);
+	const { handleRouteUrl, devInfo, getAuth} = useContext(GlobalContext);
 
 	useEffect(() => {
 		handleRouteUrl("overview", 0);
+		deviceinfo(devInfo);
+		getAuth();
 	},
 		// eslint-disable-next-line
 		[])
@@ -23,6 +26,7 @@ const MainPanel = (props) => {
 			{ id: 6, name: "sport", icon: "soccer", page: 1 },
 			{ id: 7, name: "live sport", icon: "football", page: 0 },
 			{ id: 8, name: "concerts", icon: "music", page: 1 },
+			{ id: 9, name: "settings", icon: "gear", page: 0 },
 		];
 		return _tab_names;
 	}, []);

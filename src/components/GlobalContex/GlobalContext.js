@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
 import LS2Request from "@enact/webos/LS2Request";
-//import deviceinfo from '@enact/webos/deviceinfo';
 
 const initVal = {
   route: "",
@@ -8,19 +7,59 @@ const initVal = {
   page: 0,
 };
 
+const authInit = {
+  username: "",
+  password: "",
+  device: "",
+};
+
+const authHC = {
+  username: "stani_mi@yahoo.com",
+  password: "sTanislav73!",
+  device: "b28b1e1a68db30b2f37e33f08db4d72e",
+};
+
 export const GlobalContext = createContext({
   handleRouteUrl: () => {},
+  devInfo: () => {},
+  getAuth: () => {},
   initVal,
+  authInit,
 });
 
 const GlobalState = ({ children }) => {
   const [voyoState, setvoyoState] = useState(initVal);
-/*
+  const [auth, setauthState] = useState(authInit);
+
+  const [device, setdeviceState] = useState(false);
+
   const devInfo = (info) => {
     console.log(info);
-  }
-  deviceinfo(devInfo);
-*/
+    if (info.modelName === "webOS Device") {
+      setdeviceState(false);
+    } else {
+      setdeviceState(true);
+    }
+  };
+
+  const getAuth = () => {
+    if (device) {
+      new LS2Request().send({
+        service: "luna://com.voyo.bg.service",
+        method: "auth",
+        parameters: {
+          auth: "get",
+        },
+        onSuccess: (res) => {
+          console.log("auth - get - data");
+          setauthState(res.auth);
+        },
+      });
+    } else {
+      setauthState(authHC);
+    }
+  };
+
   const processData = (data, page, route_url) => {
     console.log("handleRouteUrl", data);
     if (data) {
@@ -68,7 +107,7 @@ const GlobalState = ({ children }) => {
     };
 
     let dest = null;
-    if (route_url === "" || route_url === "test") {
+    if (route_url === "" || route_url === "settings") {
       const voyo = {
         route: route_url,
         dataList: null,
@@ -84,7 +123,6 @@ const GlobalState = ({ children }) => {
     if (page > 0) {
       pg = pg + page;
     }
-    let device = false;
     if (device) {
       const url = `${real_url}${path}${dest}${pg}`;
       new LS2Request().send({
@@ -107,7 +145,10 @@ const GlobalState = ({ children }) => {
   };
   const contextValue = {
     handleRouteUrl,
+    devInfo,
+    getAuth,
     voyoState,
+    auth,
   };
 
   return (
