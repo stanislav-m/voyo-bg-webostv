@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import LS2Request from "@enact/webos/LS2Request";
+import axios from "axios";
 
 const initVal = {
   route: "",
@@ -22,46 +23,56 @@ const authHC = {
 export const GlobalContext = createContext({
   handleRouteUrl: () => {},
   devInfo: () => {},
-  getAuth: () => {},
+  getAuthData: () => {},
+  setAuthData: () => {},
   initVal,
   authInit,
 });
 
 const GlobalState = ({ children }) => {
   const [voyoState, setvoyoState] = useState(initVal);
-  const [auth, setauthState] = useState(authInit);
+  const [auth, setAuth] = useState(authInit);
+  const [device, setDevice] = useState(false);
 
-  const [device, setdeviceState] = useState(false);
-
-  const devInfo = (info) => {
-    console.log(info);
-    if (info.modelName === "webOS Device") {
-      setdeviceState(false);
-    } else {
-      setdeviceState(true);
-    }
-  };
-
-  const getAuth = () => {
+  const getAuthData = () => {
     if (device) {
       new LS2Request().send({
         service: "luna://com.voyo.bg.service",
         method: "auth",
         parameters: {
-          auth: "get",
+          action: "get",
         },
         onSuccess: (res) => {
-          console.log("auth - get - data");
-          setauthState(res.auth);
+          console.log("auth - get - data", res);
+          setAuth(res.data);
         },
       });
     } else {
-      setauthState(authHC);
+      console.log("auth - get HC - data");
+      setAuth(authHC);
+    }
+  };
+  const setAuthData = (new_auth) => {
+    if (device) {
+      new LS2Request().send({
+        service: "luna://com.voyo.bg.service",
+        method: "auth",
+        parameters: {
+          action: "set",
+          data: new_auth,
+        },
+        onSuccess: (res) => {
+          console.log("auth - set - data", res);
+          setAuth(new_auth);
+        },
+      });
+    } else {
+      setAuth(new_auth);
     }
   };
 
   const processData = (data, page, route_url) => {
-    console.log("handleRouteUrl", data);
+    console.log("processData", data);
     if (data) {
       if (page === 0 || (page < 2 && route_url !== voyoState.route)) {
         const voyo = {
@@ -88,10 +99,10 @@ const GlobalState = ({ children }) => {
     }
   };
 
-  const handleRouteUrl = async (route_url, page) => {
-    const opts = {
-      mode: "cors",
-    };
+  const handleRouteUrl = (route_url, page) => {
+    if (auth.username === "") {
+      getAuthData();
+    }
     console.log(route_url, page);
     const route_des = {
       home: "overview",
@@ -138,15 +149,29 @@ const GlobalState = ({ children }) => {
       });
     } else {
       const url = `http://localhost:5000`;
-      const responce = await fetch(`${url}${path}${dest}${pg}`, opts);
-      const data = await responce.json();
-      processData(data, page, route_url);
+      console.log(`${url}${path}${dest}${pg}`);
+      axios.get(`${url}${path}${dest}${pg}`).then((res) => {
+        console.log("asios getdata");
+        processData(res.data, page, route_url);
+      });
     }
   };
+
+  const devInfo = (info) => {
+    console.log(info);
+    if (info.modelName === "webOS Device") {
+      setDevice(false);
+    } else {
+      setDevice(true);
+    }
+    getAuthData();
+  };
+
   const contextValue = {
     handleRouteUrl,
     devInfo,
-    getAuth,
+    getAuthData,
+    setAuthData,
     voyoState,
     auth,
   };

@@ -8,11 +8,12 @@ import Settings from '../../views/Settings'
 import css from './Router.module.less';
 
 const Router = () => {
-  const { voyoState} = useContext(GlobalContext);
-
+  const { voyoState, auth} = useContext(GlobalContext);
+  console.log("router:" , voyoState.route);
   return (
     <div className={css.content}>
-      {voyoState.route === "home" && <OverviewList />}
+      {voyoState.route === "home" && auth.username === "" && <Settings />}
+      {voyoState.route === "home" && auth.username !== "" && <OverviewList />}
       {voyoState.route === "TV" && <TVList />}
       {["films", "series", "shows", "kids", "concerts", "sport", "live sport"].indexOf(voyoState.route) > -1 && <CategList />}
       {voyoState.route === "settings" && <Settings />}

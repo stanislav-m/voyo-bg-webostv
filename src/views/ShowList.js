@@ -32,22 +32,20 @@ const ShowList = ({ imageitems, total, ...rest }) => {
     ({ moreInfo }) => {
       const { lastVisibleIndex } = moreInfo;
       console.log(lastVisibleIndex, imageitems.length, total);
-      if (
-        lastVisibleIndex === imageitems.length - 1 &&
-        imageitems.length < total
-      ) {
+      if (lastVisibleIndex === imageitems.length - 1 &&
+          imageitems.length < total) {
         setselectedindex(lastVisibleIndex);
         handleRouteUrl(voyoState.route, imageitems.length / 24 + 1);
       }
     },
-    [imageitems.length, handleRouteUrl, voyoState.route, total]
+    [imageitems.length, total, voyoState.route, handleRouteUrl]
   );
 
   const scrollToRef = useRef(null);
 
   useEffect(() => {
     scrollToRef.current({ index: selectedindex, animate: false, focus: true });
-  });
+  }, [selectedindex]);
 
   useEffect(() => {
     // Below is an example of using scrollTo method for setting an "initial" position of VirtualList.

@@ -6,12 +6,12 @@ import Router from '../components/Router';
 import deviceinfo from '@enact/webos/deviceinfo';
 
 const MainPanel = (props) => {
-	const { handleRouteUrl, devInfo, getAuth} = useContext(GlobalContext);
+	const { handleRouteUrl, devInfo} = useContext(GlobalContext);
 
+	console.log("main panel");
 	useEffect(() => {
-		handleRouteUrl("overview", 0);
 		deviceinfo(devInfo);
-		getAuth();
+		handleRouteUrl("home", 0);
 	},
 		// eslint-disable-next-line
 		[])

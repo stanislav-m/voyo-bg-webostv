@@ -39,6 +39,7 @@
 		"@enact/spotlight": "^4.7.6",
 		"@enact/ui": "^4.7.6",
 		"@enact/webos": "^4.7.6",
+		"axios": "^1.6.7",
 		"ilib": "npm:ilib-webos@^14.18.0-webos1",
 		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
