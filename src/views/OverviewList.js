@@ -1,14 +1,13 @@
-import { useContext, useCallback, useEffect, useRef } from "react";
-import { GlobalContext } from "../components/GlobalContex";
+import { useCallback, useEffect, useRef } from "react";
 import TvsList from "./TvsList";
 import ShowList from "./ShowList";
 import BodyText from '@enact/sandstone/BodyText';
 import VirtualList from '@enact/sandstone/VirtualList';
 import ri from '@enact/ui/resolution';
 
-const OverviewList = () => {
-  const { voyoState } = useContext(GlobalContext);
-  const { liveTvs, sections } = voyoState.dataList;
+const OverviewList = ({data, ... rest}) => {
+  console.log(data, rest);
+  const { liveTvs, sections } = data.dataList;
 
   const renderItem = useCallback(({ index }) => {
     return (
@@ -31,6 +30,7 @@ const OverviewList = () => {
                 {sections[index - 1].name}
               </BodyText>
               <ShowList
+                route={data.route}
                 imageitems={sections[index - 1].content}
                 direction="horizontal"
                 total={sections[index - 1].content.length}
@@ -40,7 +40,7 @@ const OverviewList = () => {
       </div>
     )
   }
-    , [liveTvs, sections]);
+    , [liveTvs, sections, data.route]);
 
   const scrollToRef = useRef(null);
 

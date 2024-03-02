@@ -1,6 +1,5 @@
 import {VirtualGridList} from '@enact/sandstone/VirtualList';
 import ri from '@enact/ui/resolution';
-import PropTypes from 'prop-types';
 import {useCallback} from 'react';
 
 import TvItem from './Tvtem';
@@ -32,11 +31,6 @@ const TvsList = ({imageitems, ...rest}) => {
             hoverToScroll
 		/>
 	);
-};
-
-TvsList.propTypes = {
-	dispatch: PropTypes.func,
-	imageitems: PropTypes.array
 };
 
 export default TvsList;

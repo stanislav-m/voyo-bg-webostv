@@ -1,16 +1,15 @@
-import { useContext } from "react";
-import { GlobalContext } from "../components/GlobalContex";
 import ShowList from "./ShowList";
 
 import css from "./CategList.module.less";
 
-const CategList = () => {
-  const { voyoState } = useContext(GlobalContext);
-  const { found_rows, items } = voyoState.dataList;
+const CategList = ({data}) => {
+  const { found_rows, items } = data.dataList;
+  console.log(data);
 
   return (
     <div className={css.list}>
       <ShowList
+        route={data.route}
         imageitems={items}
         total={Number(found_rows)}
         className={css.list}

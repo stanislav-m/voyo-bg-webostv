@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import { GlobalContext } from "../components/GlobalContex";
 import TvsList from './TvsList';
 
 import css from './TVList.module.less';
 
-const TVList = () => {
-  const { voyoState } = useContext(GlobalContext);
-  const { liveTvs} = voyoState.dataList;
+const TVList = ({data}) => {
+  const { liveTvs} = data.dataList;
 
   return (
       <div className={css.list}>

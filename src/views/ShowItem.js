@@ -1,15 +1,34 @@
-import kind from '@enact/core/kind';
+//import kind from '@enact/core/kind';
 import ImageItem from '@enact/sandstone/ImageItem';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 
+const ShowItem = ({ image, title, selected, selectImageItem, selectionOverlayShowing, ...rest }) => {
+
+	return (
+		<ImageItem
+			{...rest}
+			label={title}
+			onClick={selectImageItem}
+			selected={selected}
+			showSelection={selectionOverlayShowing}
+			src={image.replace("{WIDTH}x{HEIGHT}", "284x410")}
+			style={{ padding: '18px' }}
+		>
+			{title}
+		</ImageItem>
+	);
+}
+export default ShowItem;
+
+/*
 const GalleryShowItem = kind({
 	name: 'ShowItem',
 
 	propTypes: {
-        id: PropTypes.string,
-        image: PropTypes.string,
-        url: PropTypes.string,
-        title: PropTypes.string,
+		id: PropTypes.string,
+		image: PropTypes.string,
+		url: PropTypes.string,
+		title: PropTypes.string,
 		selected: PropTypes.bool,
 		selectImageItem: PropTypes.func,
 		selectionOverlayShowing: PropTypes.bool,
@@ -32,5 +51,5 @@ const GalleryShowItem = kind({
 		);
 	}
 });
-
 export default GalleryShowItem;
+*/

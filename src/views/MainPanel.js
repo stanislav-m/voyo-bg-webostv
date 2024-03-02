@@ -6,15 +6,16 @@ import Router from '../components/Router';
 import deviceinfo from '@enact/webos/deviceinfo';
 
 const MainPanel = (props) => {
-	const { handleRouteUrl, devInfo} = useContext(GlobalContext);
+	const { voyoState, handleRouteUrl, devInfo } = useContext(GlobalContext);
 
 	console.log("main panel");
 	useEffect(() => {
 		deviceinfo(devInfo);
 		handleRouteUrl("home", 0);
-	},
-		// eslint-disable-next-line
+	}, // eslint-disable-next-line
 		[])
+
+
 	const tab_names = useMemo(() => {
 		const _tab_names = [
 			{ id: 0, name: "home", icon: "home", page: 0 },
@@ -45,7 +46,7 @@ const MainPanel = (props) => {
 				{
 					tab_names.map((item) => (
 						<Tab title={item.name} icon={item.icon} key={item.id}>
-							<Router />
+							<Router voyoState={voyoState} handleRouteUrl={handleRouteUrl} />
 						</Tab>
 					))
 				}

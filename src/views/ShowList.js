@@ -1,15 +1,12 @@
 import { VirtualGridList } from "@enact/sandstone/VirtualList";
 import ri from "@enact/ui/resolution";
 import PropTypes from "prop-types";
-import { useCallback, useContext, useState, useRef, useEffect } from "react";
-import { GlobalContext } from "../components/GlobalContex/GlobalContext";
-
+import { useCallback, useState, useRef, useEffect } from "react";
 import ShowItem from "./ShowItem";
 
-const ShowList = ({ imageitems, total, ...rest }) => {
-  const { voyoState, handleRouteUrl } = useContext(GlobalContext);
+const ShowList = ({ route, handle, imageitems, total, ...rest }) => {
   const [selectedindex, setselectedindex] = useState(0);
-  console.log(voyoState.route, imageitems.length, total);
+  console.log(route, imageitems.length, total);
 
   const renderItem = useCallback(
     ({ ...props }) => {
@@ -35,10 +32,10 @@ const ShowList = ({ imageitems, total, ...rest }) => {
       if (lastVisibleIndex === imageitems.length - 1 &&
           imageitems.length < total) {
         setselectedindex(lastVisibleIndex);
-        handleRouteUrl(voyoState.route, imageitems.length / 24 + 1);
+        handle(route, imageitems.length / 24 + 1);
       }
     },
-    [imageitems.length, total, voyoState.route, handleRouteUrl]
+    [imageitems.length, total, route, handle]
   );
 
   const scrollToRef = useRef(null);
