@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useEffect } from "react";
+import { useCallback, useContext, useMemo, useEffect, useState, useReducer } from "react";
 import { Panel } from '@enact/sandstone/Panels';
 import { TabLayout, Tab } from '@enact/sandstone/TabLayout';
 import { GlobalContext } from "../components/GlobalContex";
@@ -6,15 +6,29 @@ import Router from '../components/Router';
 import deviceinfo from '@enact/webos/deviceinfo';
 
 const MainPanel = (props) => {
-	const { voyoState, handleRouteUrl, devInfo } = useContext(GlobalContext);
+	const { voyo_map, handleRouteUrl, devInfo } = useContext(GlobalContext);
+	const [route, setRoute] = useState("home");
 
-	console.log("main panel");
+	const ReducerFunction = (state, action) => {
+		switch (action.type){
+			case "update":
+				
+		}
+	}
+
+	const initArg = {
+		route: "",
+		page: 0,
+		data: null,
+	}
+	const [state, dispatch] = useReducer(ReducerFunction, initArg);
+
+	console.log("main panel",voyo_map);
 	useEffect(() => {
 		deviceinfo(devInfo);
-		handleRouteUrl("home", 0);
+		handleRouteUrl(route, 0);
 	}, // eslint-disable-next-line
 		[])
-
 
 	const tab_names = useMemo(() => {
 		const _tab_names = [
@@ -34,6 +48,8 @@ const MainPanel = (props) => {
 
 	const tabSelected = useCallback(({ index }) => {
 		handleRouteUrl(tab_names[index].name, tab_names[index].page);
+		setRoute(tab_names[index].name);
+		console.log("tab select", tab_names[index].name);
 	}, [handleRouteUrl, tab_names]);
 
 	return (
@@ -46,7 +62,7 @@ const MainPanel = (props) => {
 				{
 					tab_names.map((item) => (
 						<Tab title={item.name} icon={item.icon} key={item.id}>
-							<Router voyoState={voyoState} handleRouteUrl={handleRouteUrl} />
+							<Router name={route} voyoState={voyo_map[route]} handleRouteUrl={handleRouteUrl} />
 						</Tab>
 					))
 				}

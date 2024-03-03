@@ -3,9 +3,11 @@ import LS2Request from "@enact/webos/LS2Request";
 import axios from "axios";
 
 const initVal = {
+  "" : {
   route: "",
   dataList: [],
   page: 0,
+  }
 };
 
 const authInit = {
@@ -30,7 +32,7 @@ export const GlobalContext = createContext({
 });
 
 const GlobalState = ({ children }) => {
-  const [voyoState, setvoyoState] = useState(initVal);
+  const [voyo_map, setVoyo_map] = useState(initVal);
   const [auth, setAuth] = useState(authInit);
   const [device, setDevice] = useState(false);
 
@@ -74,27 +76,27 @@ const GlobalState = ({ children }) => {
   const processData = (data, page, route_url) => {
     console.log("processData", data);
     if (data) {
-      if (page === 0 || (page < 2 && route_url !== voyoState.route)) {
+      if (page === 0 || (page < 2 && Object.keys(voyo_map).indexOf(route_url) < 0)) {
         const voyo = {
           route: route_url,
           dataList: data,
           page: page,
         };
-        console.log(voyo);
-        setvoyoState(voyo);
+        voyo_map[route_url]=voyo;
+        setVoyo_map(voyo_map);
+        console.log(voyo_map);
       } else {
-        let voyo = {
-          route: route_url,
-          dataList: voyoState.dataList,
-          page: page,
-        };
-        if (page > voyoState.dataList.items.length / 24) {
+        let voyo = voyo_map[route_url];
+        voyo.page = page;
+        voyo.route = route_url;
+        if (page > voyo.dataList.items.length / 24) {
           for (let idx = 0; idx < data.items.length; ++idx) {
             voyo.dataList.items.push(data.items[idx]);
           }
         }
-        console.log(voyo);
-        setvoyoState(voyo);
+        voyo_map[route_url]=voyo;
+        setVoyo_map(voyo_map);
+        console.log(voyo_map);
       }
     }
   };
@@ -119,12 +121,7 @@ const GlobalState = ({ children }) => {
 
     let dest = null;
     if (route_url === "" || route_url === "settings") {
-      const voyo = {
-        route: route_url,
-        dataList: null,
-        page: 0,
-      };
-      setvoyoState(voyo);
+      //setvoyoState(voyo);
       return;
     }
     dest = route_des[route_url];
@@ -172,7 +169,7 @@ const GlobalState = ({ children }) => {
     devInfo,
     getAuthData,
     setAuthData,
-    voyoState,
+    voyo_map,
     auth,
   };
 

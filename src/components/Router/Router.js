@@ -2,13 +2,19 @@ import OverviewList from "../../views/OverviewList";
 import TVList from "../../views/TVList";
 import CategList from '../../views/CategList';
 import Settings from '../../views/Settings'
+import Loading from '../../views/Loading';
 
 import css from './Router.module.less';
 
-const Router = ({voyoState, handleRouteUrl}) => {
-  console.log("router:", voyoState);
+const Router = ({name, voyoState, handleRouteUrl}) => {
+  console.log("router:", name, voyoState);
 
   const RouteFunction = (route) => {
+    console.log(route, voyoState);
+
+    if (route !== "settings" && voyoState === undefined) {
+      return <Loading />
+    }
     switch (route) {
       case "home":
         return <OverviewList data={voyoState} handle={handleRouteUrl} />;
@@ -25,7 +31,7 @@ const Router = ({voyoState, handleRouteUrl}) => {
 
   return (
     <div className={css.content}>
-      {RouteFunction(voyoState.route)}
+      {RouteFunction(name)}
     </div>
   );
 };
