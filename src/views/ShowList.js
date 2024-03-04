@@ -6,7 +6,7 @@ import ShowItem from "./ShowItem";
 
 const ShowList = ({ route, handle, imageitems, total, ...rest }) => {
   const [selectedindex, setselectedindex] = useState(0);
-  console.log(route, imageitems.length, total);
+  console.log(route, imageitems.length, total, imageitems);
 
   const renderItem = useCallback(
     ({ ...props }) => {
@@ -14,6 +14,7 @@ const ShowList = ({ route, handle, imageitems, total, ...rest }) => {
       return (
         <ShowItem
           {...props}
+          handle={handle}
           id={id}
           title={title}
           image={image}
@@ -22,20 +23,22 @@ const ShowList = ({ route, handle, imageitems, total, ...rest }) => {
         />
       );
     },
-    [imageitems]
+    [imageitems, handle]
   );
 
   const ScrollStop = useCallback(
     ({ moreInfo }) => {
       const { lastVisibleIndex } = moreInfo;
-      console.log(lastVisibleIndex, imageitems.length, total);
-      if (lastVisibleIndex === imageitems.length - 1 &&
-          imageitems.length < total) {
+      console.log(lastVisibleIndex, imageitems.length, total, imageitems);
+      if (
+        lastVisibleIndex === imageitems.length - 1 &&
+        imageitems.length < total
+      ) {
         setselectedindex(lastVisibleIndex);
         handle(route, imageitems.length / 24 + 1);
       }
     },
-    [imageitems.length, total, route, handle]
+    [total, route, handle, imageitems]
   );
 
   const scrollToRef = useRef(null);

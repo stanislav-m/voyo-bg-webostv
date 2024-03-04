@@ -1,36 +1,32 @@
-import kind from '@enact/core/kind';
-import ImageItem from '@enact/sandstone/ImageItem';
-import PropTypes from 'prop-types';
+import { useCallback } from "react";
+import ImageItem from "@enact/sandstone/ImageItem";
 
-const GalleryTvItem = kind({
-	name: 'TvItem',
+const TvItem = ({
+  logo,
+  name,
+  current,
+  next,
+  handle,
+  ...rest
+}) => {
 
-	propTypes: {
-        id: PropTypes.number,
-        logo: PropTypes.string,
-        logoTransparent: PropTypes.string,
-        name: PropTypes.string,
-		selected: PropTypes.bool,
-		selectImageItem: PropTypes.func,
-		selectionOverlayShowing: PropTypes.bool,
-	},
+  const selectImageItem = useCallback((index) => {
+    console.log("clicked on: ", index);
+    handle("login", 0);
+  }, [handle]);
 
-	render: ({logo, name, current, next, selected, selectImageItem, selectionOverlayShowing, ...rest}) => {
-		delete rest.index;
-		return (
-			<ImageItem
-				{...rest}
-				label={name}
-				onClick={selectImageItem}
-				selected={selected}
-				showSelection={selectionOverlayShowing}
-				src={logo}
-				style={{padding: '18px'}}
-			>
-			{current} следва:{next}
-			</ImageItem>
-		);
-	}
-});
+  const info = current + ' следва: ' + next;
+  return (
+    <ImageItem
+      {...rest}
+      label={name}
+      onClick={selectImageItem}
+      src={logo}
+      style={{ padding: "18px" }}
+    >
+      {info}
+    </ImageItem>
+  );
+};
 
-export default GalleryTvItem;
+export default TvItem;

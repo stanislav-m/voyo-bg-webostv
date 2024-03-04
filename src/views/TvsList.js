@@ -1,36 +1,42 @@
-import {VirtualGridList} from '@enact/sandstone/VirtualList';
-import ri from '@enact/ui/resolution';
-import {useCallback} from 'react';
+import { VirtualGridList } from "@enact/sandstone/VirtualList";
+import ri from "@enact/ui/resolution";
+import { useCallback } from "react";
 
-import TvItem from './Tvtem';
+import TvItem from "./Tvtem";
 
-const TvsList = ({imageitems, ...rest}) => {
-	const renderItem = useCallback(({...props}) =>  {
-        const {name, logo, currentlyPlaying, nextShow} = imageitems[props.index];
-        let curTitle = null;
-        {
-            const {title} = currentlyPlaying;
-            curTitle = title
-        }
-        let nextitle = null;
-        {
-            const {title} = nextShow;
-            nextitle = title;
-        }
-        return  (<TvItem {...props} name={name} logo={logo} current={curTitle} next={nextitle} />) }
-    , [imageitems]);
+const TvsList = ({ route, handle, imageitems, ...rest }) => {
+  console.log(route, imageitems.length, imageitems);
 
-	delete rest.dispatch;
+  const renderItem = useCallback(
+    ({ ...props }) => {
+      const { id, name, logo, currentlyPlaying, nextShow } =
+        imageitems[props.index];
+      return (
+        <TvItem
+          {...props}
+          handle={handle}
+          id={id}
+          name={name}
+          logo={logo}
+          current={currentlyPlaying['title']}
+          next={nextShow['title']}
+        />
+      );
+    },
+    [imageitems, handle]
+  );
 
-	return (
-		<VirtualGridList
-			{...rest}
-			dataSize={imageitems.length}
-			itemRenderer={renderItem}
-			itemSize={{minHeight: ri.scale(326*2), minWidth: ri.scale(344*2)}}
-            hoverToScroll
-		/>
-	);
+  delete rest.dispatch;
+
+  return (
+    <VirtualGridList
+      {...rest}
+      dataSize={imageitems.length}
+      itemRenderer={renderItem}
+      itemSize={{ minHeight: ri.scale(326 * 2), minWidth: ri.scale(344 * 2) }}
+      hoverToScroll
+    />
+  );
 };
 
 export default TvsList;
