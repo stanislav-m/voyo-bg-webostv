@@ -63,6 +63,36 @@ service.register("url_get", async function(message) {
 	}
 });
 
+service.register("url_post", async function(message) {
+	console.log("In url_post callback");
+	if (message.payload.url) {
+		console.log('fetching', message.payload.url);
+		axios.get(message.payload.url)
+		.then(res => {
+		  console.log('Status Code:', res.status);
+		  console.log('data:', res.data);
+		  message.respond({
+			returnValue: true,
+			data : res.data
+			});
+		})
+		.catch(err => {
+		  console.log('Error: ', err.message);
+		  message.respond({
+			returnValue: false,
+			errorText: err.message,
+			errorCode: 1
+		});
+	});
+	} else {
+		message.respond({
+			returnValue: false,
+			errorText: err.message,
+			errorCode: 1
+		});
+	}
+});
+
 service.register("auth", async function(message) {
 	const authHC = {
 		username: "stani_mi@yahoo.com",

@@ -18,7 +18,7 @@ const Router = ({name, voyoState, handleRouteUrl}) => {
     }
     switch (route) {
       case "play":
-        return <Player title={voyoState["title"]}  source={voyoState["source"]}  type={voyoState["type"]} desc={voyoState["desc"]} poster={voyoState["poster"]} />;
+        return <Player title={voyoState["title"]}  source={voyoState["source"]}  type={voyoState["type"]} desc={voyoState["desc"]} poster={voyoState["poster"]} handle={handleRouteUrl}/>;
       case "home":
         return <OverviewList data={voyoState} handle={handleRouteUrl} />;
       case "TV":

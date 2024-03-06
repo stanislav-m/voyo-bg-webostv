@@ -1,14 +1,12 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import VideoPlayer from "@enact/sandstone/VideoPlayer";
-//import {MediaControls} from "@enact/sandstone/MediaPlayer";
+import { MediaControls } from "@enact/sandstone/MediaPlayer";
+import Button from "@enact/ui/Button";
 import Hls from "hls.js";
 
-const Player = ({ title, source, type, desc, poster }) => {
+const Player = ({ title, source, type, desc, poster, handle }) => {
   const hlsRef = useRef(null);
   const videoRef = useRef(null);
-
-  //const source = 'https://vd3.bweb.bg/live/NOXVUW8rB7qNAVJHmlkc3w/1709709143/61065646.m3u8';
-  //const type = 'application/x-mpegURL';
 
   const getHls = () => {
     if (hlsRef.current === null) {
@@ -16,6 +14,10 @@ const Player = ({ title, source, type, desc, poster }) => {
     }
     return hlsRef.current;
   };
+
+  const handlePlayerButtonHome = useCallback( () => {
+    handle("TV", 0);
+  }, [handle]);
 
   useEffect(() => {
     const hls = getHls();
@@ -32,9 +34,27 @@ const Player = ({ title, source, type, desc, poster }) => {
   return (
     <VideoPlayer ref={videoRef} title={title} poster={poster}>
       <source src={source} type={type} />
-      <infoComponents>{desc}</infoComponents>
+      <MediaControls>
+        <Button
+          icon="home"
+          onClick={handlePlayerButtonHome}
+        />
+      </MediaControls>      
     </VideoPlayer>
   );
 };
 
 export default Player;
+/*
+    <VideoPlayer ref={videoRef} title={title} poster={poster}>
+      <source src={source} type={type} />
+      <infoComponents>{desc}</infoComponents>
+      <MediaControls>
+        <Button
+          icon="home"
+          onClick={handlePlayerButtonHome}
+        />
+      </MediaControls>
+    </VideoPlayer>
+
+*/

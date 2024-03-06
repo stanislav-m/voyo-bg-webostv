@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useEffect, useState } from "react";
+import { useCallback, useContext, useMemo, useEffect } from "react";
 import { Panel } from "@enact/sandstone/Panels";
 import { TabLayout, Tab } from "@enact/sandstone/TabLayout";
 import { GlobalContext } from "../components/GlobalContex";
@@ -8,7 +8,7 @@ const MainPanel = (props) => {
   const { groute, voyo_map, handleRouteUrl, getDeviceInfo } =
     useContext(GlobalContext);
 
-  const [route, setRoute] = useState("home");
+  //const [route, setRoute] = useState("home");
 
   console.log("main panel", voyo_map);
   useEffect(
@@ -37,28 +37,32 @@ const MainPanel = (props) => {
   const tabSelected = useCallback(
     ({ index }) => {
       handleRouteUrl(tab_names[index].name, tab_names[index].page);
-      setRoute(tab_names[index].name);
+      //setRoute(tab_names[index].name);
       console.log("tab select", tab_names[index].name);
     },
     [handleRouteUrl, tab_names]
   );
   //{...rest} className={className + " " + css.app}>
-  return (
-    <div>
-      <Panel {...props}>
-        <TabLayout onSelect={tabSelected} orientation="vertical">
-          {tab_names.map((item) => (
-            <Tab title={item.name} icon={item.icon} key={item.id}>
-              <Router
-                name={groute}
-                voyoState={voyo_map[groute]}
-                handleRouteUrl={handleRouteUrl}
-              />
-            </Tab>
-          ))}
-        </TabLayout>
-      </Panel>
-    </div>
+  return groute === "play" ? (
+    <Router
+      name={groute}
+      voyoState={voyo_map[groute]}
+      handleRouteUrl={handleRouteUrl}
+    />
+  ) : (
+    <Panel {...props}>
+      <TabLayout onSelect={tabSelected} orientation="vertical">
+        {tab_names.map((item) => (
+          <Tab title={item.name} icon={item.icon} key={item.id}>
+            <Router
+              name={groute}
+              voyoState={voyo_map[groute]}
+              handleRouteUrl={handleRouteUrl}
+            />
+          </Tab>
+        ))}
+      </TabLayout>
+    </Panel>
   );
 };
 

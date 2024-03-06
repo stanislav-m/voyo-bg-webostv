@@ -35,9 +35,6 @@ export const GlobalContext = createContext({
   route_initval,
   device: false,
   credentials: null,
-  videosource: "",
-  desc: "",
-  videotype: "",
 });
 
 const GlobalState = ({ children }) => {
@@ -46,9 +43,6 @@ const GlobalState = ({ children }) => {
   const [auth, setAuth] = useState(authHC);
   const [device, setDevice] = useState(false);
   const [credentials, setCredentials] = useState(null);
-  const [videosource, setVideosource] = useState("");
-  const [desc, setDesc] = useState("");
-  const [videotype, setVideotype] = useState("");
 
   const setAuthData = (new_auth) => {
     if (device) {
@@ -284,9 +278,6 @@ const GlobalState = ({ children }) => {
     groute,
     device,
     credentials,
-    videosource,
-    desc,
-    videotype,
   };
 
   return (
