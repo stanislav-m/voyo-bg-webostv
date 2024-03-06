@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import ImageItem from "@enact/sandstone/ImageItem";
 
 const TvItem = ({
+  id,
   logo,
   name,
   current,
@@ -10,17 +11,17 @@ const TvItem = ({
   ...rest
 }) => {
 
-  const selectImageItem = useCallback((index) => {
-    console.log("clicked on: ", index);
-    handle("login", 0);
-  }, [handle]);
+  const handleClick = useCallback(() => {
+    console.log(id, name, logo);
+    handle("link", 0, id);
+    } , [handle, id, logo, name]);
 
   const info = current + ' следва: ' + next;
   return (
     <ImageItem
       {...rest}
       label={name}
-      onClick={selectImageItem}
+     onClick={handleClick}
       src={logo}
       style={{ padding: "18px" }}
     >

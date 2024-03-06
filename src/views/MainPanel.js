@@ -5,14 +5,15 @@ import { GlobalContext } from "../components/GlobalContex";
 import Router from "../components/Router";
 
 const MainPanel = (props) => {
-  const {groute, voyo_map, handleRouteUrl, getDeviceInfo } = useContext(GlobalContext);
+  const { groute, voyo_map, handleRouteUrl, getDeviceInfo } =
+    useContext(GlobalContext);
 
   const [route, setRoute] = useState("home");
 
   console.log("main panel", voyo_map);
   useEffect(
     () => {
-	  getDeviceInfo();
+      getDeviceInfo();
     }, // eslint-disable-next-line
     []
   );
@@ -41,29 +42,23 @@ const MainPanel = (props) => {
     },
     [handleRouteUrl, tab_names]
   );
-/*
-  const getRT = (l ,r) => {
-	if (l === r) {
-		return r;
-	}
-	return l;
-  }
-*/
+  //{...rest} className={className + " " + css.app}>
   return (
-    <Panel {...props}>
-      {/*<Header noCloseButton title="Voyo" />*/}
-      <TabLayout onSelect={tabSelected} orientation="vertical">
-        {tab_names.map((item) => (
-          <Tab title={item.name} icon={item.icon} key={item.id}>
-            <Router
-              name={groute}
-              voyoState={voyo_map[route]}
-              handleRouteUrl={handleRouteUrl}
-            />
-          </Tab>
-        ))}
-      </TabLayout>
-    </Panel>
+    <div>
+      <Panel {...props}>
+        <TabLayout onSelect={tabSelected} orientation="vertical">
+          {tab_names.map((item) => (
+            <Tab title={item.name} icon={item.icon} key={item.id}>
+              <Router
+                name={groute}
+                voyoState={voyo_map[groute]}
+                handleRouteUrl={handleRouteUrl}
+              />
+            </Tab>
+          ))}
+        </TabLayout>
+      </Panel>
+    </div>
   );
 };
 

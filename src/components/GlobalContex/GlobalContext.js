@@ -33,8 +33,11 @@ export const GlobalContext = createContext({
   initVal,
   authInit,
   route_initval,
-  device : false,
-  credentials : null,
+  device: false,
+  credentials: null,
+  videosource: "",
+  desc: "",
+  videotype: "",
 });
 
 const GlobalState = ({ children }) => {
@@ -42,7 +45,10 @@ const GlobalState = ({ children }) => {
   const [groute, setRoute] = useState("home");
   const [auth, setAuth] = useState(authHC);
   const [device, setDevice] = useState(false);
-  const [credentials, setCredentials] = useState(null)
+  const [credentials, setCredentials] = useState(null);
+  const [videosource, setVideosource] = useState("");
+  const [desc, setDesc] = useState("");
+  const [videotype, setVideotype] = useState("");
 
   const setAuthData = (new_auth) => {
     if (device) {
@@ -100,14 +106,32 @@ const GlobalState = ({ children }) => {
     console.log("process post Resp", route_url, data);
     if (data) {
       console.log(data);
-      if (Object.keys(data).indexOf("credentials") >= 0) {
-        setCredentials(data["credentials"]);
-        console.log(credentials);
+      if (route_url === "login") {
+        if (Object.keys(data).indexOf("credentials") >= 0) {
+          setCredentials(data["credentials"]);
+          console.log(credentials);
+        }
+      } else {
+        if (route_url === "link") {
+          if (Object.keys(data).indexOf("url") >= 0) {
+            const voyo = {
+              route: route_url,
+              title: data['content']['title'],
+              source: data['url'],
+              type: "application/x-mpegURL",
+              desc: data['content']['description'],
+              poster: data['content']['image'].replace("{WIDTH}x{HEIGHT}", "284x410"),
+            };
+            voyo_map["play"] = voyo;
+            setVoyo_map(voyo_map);
+            setRoute("play");
+            console.log(voyo_map);
+            }
+        }
       }
     }
   };
-  const handleRouteUrl = (route_url, page) => {
-    const product_id = "";
+  const handleRouteUrl = (route_url, page, product_id = 0) => {
     console.log(route_url, page);
     const route_des = {
       home: "overview",
@@ -137,7 +161,7 @@ const GlobalState = ({ children }) => {
       pg = pg + page;
     }
     let method = "url_get";
-    if (route_url === "login" || route_url === "login") {
+    if (route_url === "login" || route_url === "link") {
       method = "url_post";
     }
     if (device) {
@@ -161,11 +185,11 @@ const GlobalState = ({ children }) => {
           if (credentials) {
             const headers = {
               Authorization:
-                credentials["accessType"] +
-                " " +
-                credentials["accessToken"],
+                credentials["accessType"] + " " + credentials["accessToken"],
             };
-            console.log('get', `${url}${path}${dest}${pg}`,{ headers: headers });
+            console.log("get", `${url}${path}${dest}${pg}`, {
+              headers: headers,
+            });
             axios
               .get(`${url}${path}${dest}${pg}`, { headers: headers })
               .then((res) => {
@@ -182,22 +206,32 @@ const GlobalState = ({ children }) => {
           });
         }
       } else {
-        if (credentials) {
+        if (credentials && route_url === "link") {
           const headers = {
             Authorization:
-            credentials["accessType"] + " " + credentials["accessToken"],
+              credentials["accessType"] + " " + credentials["accessToken"],
           };
+          console.log("post link", headers);
           axios
-            .post(`${url}${path}${dest}${pg}`, auth, { headers: headers })
+            .post(`${url}${path}${dest}${pg}`, null, { headers: headers })
             .then((res) => {
-              console.log("asios postdata");
+              console.log("post link", headers);
               processPostResp(res.data, route_url);
             });
         } else {
-          axios.post(`${url}${path}${dest}${pg}`, auth).then((res) => {
-            console.log("asios postdata");
-            processPostResp(res.data, route_url);
-          });
+          if (route_url === "login") {
+            const headers = {
+              "Content-Type":
+                "application/x-www-form-urlencoded; charset=UTF-8",
+              Accept: "application/json, text/plain, */*",
+            };
+            axios
+              .post(`${url}${path}${dest}${pg}`, auth, { headers: headers })
+              .then((res) => {
+                console.log("asios postdata");
+                processPostResp(res.data, route_url);
+              });
+          }
         }
       }
     }
@@ -250,6 +284,9 @@ const GlobalState = ({ children }) => {
     groute,
     device,
     credentials,
+    videosource,
+    desc,
+    videotype,
   };
 
   return (

@@ -3,6 +3,7 @@ import TVList from "../../views/TVList";
 import CategList from '../../views/CategList';
 import Settings from '../../views/Settings'
 import Loading from '../../views/Loading';
+import Player from '../../views/Player';
 
 import css from './Router.module.less';
 
@@ -16,6 +17,8 @@ const Router = ({name, voyoState, handleRouteUrl}) => {
       return <Loading />
     }
     switch (route) {
+      case "play":
+        return <Player title={voyoState["title"]}  source={voyoState["source"]}  type={voyoState["type"]} desc={voyoState["desc"]} poster={voyoState["poster"]} />;
       case "home":
         return <OverviewList data={voyoState} handle={handleRouteUrl} />;
       case "TV":

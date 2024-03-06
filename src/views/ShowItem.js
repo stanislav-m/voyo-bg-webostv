@@ -1,11 +1,16 @@
 import { useCallback } from "react";
 import ImageItem from "@enact/sandstone/ImageItem";
 
-const ShowItem = ({ image, title, handle, ...rest }) => {
-  const selectImageItem = useCallback((index) => {
-    console.log("clicked on: ", index);
-    handle("info", 0);
-  }, [handle]);
+const ShowItem = ({ id, image, title, handle, type, ...rest }) => {
+  const selectImageItem = useCallback(
+    (index) => {
+      console.log("clicked on: ", index);
+      if (type === "movie") {
+        handle("link", 0, id);
+      }
+    },
+    [handle, id, type]
+  );
 
   return (
     <ImageItem
