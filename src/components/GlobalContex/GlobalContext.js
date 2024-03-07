@@ -41,7 +41,7 @@ const GlobalState = ({ children }) => {
   const [voyo_map, setVoyo_map] = useState(initVal);
   const [groute, setRoute] = useState("home");
   const [auth, setAuth] = useState(authHC);
-  const [device, setDevice] = useState(false);
+  const [device, setDevice] = useState(true);
   const [credentials, setCredentials] = useState(null);
 
   const setAuthData = (new_auth) => {
@@ -78,7 +78,6 @@ const GlobalState = ({ children }) => {
         voyo_map[route_url] = voyo;
         setVoyo_map(voyo_map);
         setRoute(route_url);
-
         console.log(voyo_map);
       } else {
         let voyo = voyo_map[route_url];
@@ -110,21 +109,63 @@ const GlobalState = ({ children }) => {
           if (Object.keys(data).indexOf("url") >= 0) {
             const voyo = {
               route: route_url,
-              title: data['content']['title'],
-              source: data['url'],
+              title: data["content"]["title"],
+              source: data["url"],
               type: "application/x-mpegURL",
-              desc: data['content']['description'],
-              poster: data['content']['image'].replace("{WIDTH}x{HEIGHT}", "284x410"),
+              desc: data["content"]["description"],
+              poster: data["content"]["image"].replace(
+                "{WIDTH}x{HEIGHT}",
+                "284x410"
+              ),
             };
             voyo_map["play"] = voyo;
             setVoyo_map(voyo_map);
             setRoute("play");
             console.log(voyo_map);
-            }
+          }
         }
       }
     }
   };
+
+  const sendUrlReq = (url_req, method, headers, data, page, route_url) => {
+    console.log(url_req, method, headers, data, page, route_url);
+    if (device) {
+      new LS2Request().send({
+        service: "luna://com.voyo.bg.service",
+        method: method,
+        parameters: {
+          url: url_req,
+          headers: headers,
+          data: data,
+        },
+        onSuccess: (res) => {
+          console.log(method, res.data);
+          if (method === "url_get") {
+            return processData(res.data, page, route_url);
+          } else {
+            return processPostResp(res.data, route_url);
+          }
+        },
+        onFailure: (res) => {
+          console.log("failure:", method, url_req, res);
+        },
+      });
+    } else {
+      if (method === "url_get") {
+        axios.get(url_req, { headers: headers }).then((res) => {
+          console.log(method, url_req, res.data);
+          return processData(res.data, page, route_url);
+        });
+      } else {
+        axios.post(url_req, data, { headers: headers }).then((res) => {
+          console.log(method, url_req, res.data);
+          return processPostResp(res.data, route_url);
+        });
+      }
+    }
+  };
+
   const handleRouteUrl = (route_url, page, product_id = 0) => {
     console.log(route_url, page);
     const route_des = {
@@ -158,81 +199,30 @@ const GlobalState = ({ children }) => {
     if (route_url === "login" || route_url === "link") {
       method = "url_post";
     }
+    let url = `http://localhost:5000`;
     if (device) {
-      const url = `${real_url}${path}${dest}${pg}`;
-      new LS2Request().send({
-        service: "luna://com.voyo.bg.service",
-        method: method,
-        parameters: {
-          url: url,
-        },
-        onSuccess: (res) => {
-          console.log("getUrl - data");
-          processData(res.data, page, route_url);
-        },
-      });
-    } else {
-      const url = `http://localhost:5000`;
-      console.log(method, route_url, `${url}${path}${dest}${pg}`);
-      if (method === "url_get") {
-        if (route_url === "info") {
-          if (credentials) {
-            const headers = {
-              Authorization:
-                credentials["accessType"] + " " + credentials["accessToken"],
-            };
-            console.log("get", `${url}${path}${dest}${pg}`, {
-              headers: headers,
-            });
-            axios
-              .get(`${url}${path}${dest}${pg}`, { headers: headers })
-              .then((res) => {
-                console.log("asios info", res.data);
-                //processData(res.data, page, route_url);
-              });
-          } else {
-            console.log("cred:", credentials);
-          }
-        } else {
-          axios.get(`${url}${path}${dest}${pg}`).then((res) => {
-            console.log("asios getdata");
-            processData(res.data, page, route_url);
-          });
-        }
-      } else {
-        if (credentials && route_url === "link") {
-          const headers = {
-            Authorization:
-              credentials["accessType"] + " " + credentials["accessToken"],
-          };
-          console.log("post link", headers);
-          axios
-            .post(`${url}${path}${dest}${pg}`, null, { headers: headers })
-            .then((res) => {
-              console.log("post link", headers);
-              processPostResp(res.data, route_url);
-            });
-        } else {
-          if (route_url === "login") {
-            const headers = {
-              "Content-Type":
-                "application/x-www-form-urlencoded; charset=UTF-8",
-              Accept: "application/json, text/plain, */*",
-            };
-            axios
-              .post(`${url}${path}${dest}${pg}`, auth, { headers: headers })
-              .then((res) => {
-                console.log("asios postdata");
-                processPostResp(res.data, route_url);
-              });
-          }
-        }
-      }
+      url = real_url;
     }
+    const url_req = `${url}${path}${dest}${pg}`;
+    let headers = {
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      Accept: "application/json, text/plain, */*",
+    };
+    if (route_url === "link" || route_url === "info") {
+      headers = {
+        Authorization:
+          credentials["accessType"] + " " + credentials["accessToken"],
+      };
+    }
+    let data = null;
+    if (route_url === "login") {
+      data = auth;
+    }
+    return sendUrlReq(url_req, method, headers, data, page, route_url);
   };
 
   const getAuthData = () => {
-    if (device) {
+    if (false) {
       new LS2Request().send({
         service: "luna://com.voyo.bg.service",
         method: "auth",
@@ -242,13 +232,11 @@ const GlobalState = ({ children }) => {
         onSuccess: (res) => {
           console.log("auth - get - data", res);
           setAuth(res.data);
-          handleRouteUrl("login", 0);
         },
       });
     } else {
       console.log("auth - get HC - data");
       setAuth(authHC);
-      handleRouteUrl("login", 0);
     }
   };
 

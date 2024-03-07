@@ -15,7 +15,7 @@ const Player = ({ title, source, type, desc, poster, handle }) => {
     return hlsRef.current;
   };
 
-  const handlePlayerButtonHome = useCallback( () => {
+  const handlePlayerButtonHome = useCallback(() => {
     handle("TV", 0);
   }, [handle]);
 
@@ -34,12 +34,10 @@ const Player = ({ title, source, type, desc, poster, handle }) => {
   return (
     <VideoPlayer ref={videoRef} title={title} poster={poster}>
       <source src={source} type={type} />
+      <infoComponents>{desc}</infoComponents>
       <MediaControls>
-        <Button
-          icon="home"
-          onClick={handlePlayerButtonHome}
-        />
-      </MediaControls>      
+        <Button icon="home" onClick={handlePlayerButtonHome} />
+      </MediaControls>
     </VideoPlayer>
   );
 };

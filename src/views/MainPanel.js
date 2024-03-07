@@ -14,6 +14,7 @@ const MainPanel = (props) => {
   useEffect(
     () => {
       getDeviceInfo();
+      handleRouteUrl("login", 0);
     }, // eslint-disable-next-line
     []
   );
