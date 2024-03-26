@@ -41,7 +41,7 @@ const GlobalState = ({ children }) => {
   const [voyo_map, setVoyo_map] = useState(initVal);
   const [groute, setRoute] = useState("home");
   const [auth, setAuth] = useState(authHC);
-  const [device, setDevice] = useState(true);
+  const [device, setDevice] = useState(false);
   const [credentials, setCredentials] = useState(null);
 
   const setAuthData = (new_auth) => {
@@ -133,9 +133,10 @@ const GlobalState = ({ children }) => {
     if (device) {
       new LS2Request().send({
         service: "luna://com.voyo.bg.service",
-        method: method,
+        method: "url",
         parameters: {
           url: url_req,
+          method: method,
           headers: headers,
           data: data,
         },
@@ -247,6 +248,7 @@ const GlobalState = ({ children }) => {
     } else {
       setDevice(true);
     }
+    //setAuth(authHC);
     getAuthData();
   };
 

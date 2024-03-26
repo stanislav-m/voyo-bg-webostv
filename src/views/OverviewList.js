@@ -20,6 +20,7 @@ const OverviewList = ({data, ... rest}) => {
                 ТВ Канали
               </BodyText>
               <TvsList
+                {...rest}
                 imageitems={liveTvs}
                 direction="horizontal"
               />
@@ -40,7 +41,7 @@ const OverviewList = ({data, ... rest}) => {
       </div>
     )
   }
-    , [liveTvs, sections, data.route]);
+    , [liveTvs, sections, data.route, rest]);
 
   const scrollToRef = useRef(null);
 
