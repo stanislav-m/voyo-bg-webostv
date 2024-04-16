@@ -30,12 +30,10 @@ const ShowList = ({ route, handle, imageitems, total, ...rest }) => {
     ({ moreInfo }) => {
       const { lastVisibleIndex } = moreInfo;
       console.log(lastVisibleIndex, imageitems.length, total, imageitems);
-      if (
-        lastVisibleIndex === imageitems.length - 1 &&
-        imageitems.length < total
-      ) {
-        setselectedindex(lastVisibleIndex);
-        handle(route, imageitems.length / 24 + 1);
+      if (lastVisibleIndex === imageitems.length - 1 &&
+          imageitems.length < total) {
+            setselectedindex(lastVisibleIndex);
+            handle(route, imageitems.length / 24 + 1);
       }
     },
     [total, route, handle, imageitems]

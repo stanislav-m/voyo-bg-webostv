@@ -41,7 +41,7 @@ const GlobalState = ({ children }) => {
   const [voyo_map, setVoyo_map] = useState(initVal);
   const [groute, setRoute] = useState("home");
   const [auth, setAuth] = useState(authHC);
-  const [device, setDevice] = useState(false);
+  const [device, setDevice] = useState(true);
   const [credentials, setCredentials] = useState(null);
 
   const setAuthData = (new_auth) => {
@@ -111,6 +111,8 @@ const GlobalState = ({ children }) => {
               route: route_url,
               title: data["content"]["title"],
               source: data["url"],
+              videoType: data["videoType"],
+              drm: data["drm"],
               type: "application/x-mpegURL",
               desc: data["content"]["description"],
               poster: data["content"]["image"].replace(

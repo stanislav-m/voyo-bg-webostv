@@ -18,7 +18,19 @@ const Router = ({name, voyoState, handleRouteUrl}) => {
     }
     switch (route) {
       case "play":
-        return <Player title={voyoState["title"]}  source={voyoState["source"]}  type={voyoState["type"]} desc={voyoState["desc"]} poster={voyoState["poster"]} handle={handleRouteUrl}/>;
+        {
+        let drmcfg= "";
+        if (voyoState['drm'] != undefined) {
+          const ks = voyoState['drm']['keySystem'];
+          const lu = voyoState['drm']['licenseUrl'];
+          const voyo_serv = {
+            'com.widevine.alpha': lu,
+          };
+         drmcfg = { drm: { servers: voyo_serv } };
+         console.log(drmcfg, voyoState["source"]);
+        }
+        return <Player title={voyoState["title"]}  source={voyoState["source"]} config={drmcfg} desc={voyoState["desc"]} poster={voyoState["poster"]} handle={handleRouteUrl}/>;
+      }
       case "home":
         return <OverviewList data={voyoState} handle={handleRouteUrl} />;
       case "TV":
