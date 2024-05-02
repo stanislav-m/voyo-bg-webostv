@@ -19,7 +19,7 @@ function ShakaPlayer({ src, config, className, ...rest }, ref) {
   const videoRef = React.useRef(null);
 
   const [player, setPlayer] = React.useState(null);
-//  const [ui, setUi] = React.useState(null);
+  const [ui, setUi] = React.useState(null);
 
   // Effect to handle component mount & mount.
   // Not related to the src prop, this hook creates a shaka.Player instance.
@@ -27,24 +27,37 @@ function ShakaPlayer({ src, config, className, ...rest }, ref) {
   React.useEffect(() => {
     const _player = new shaka.Player(videoRef.current);
     setPlayer(_player);
-    /*
+    
     let _ui = null;
-    if (!chromeless) {
-      const __ui = new shaka.ui.Overlay(
-        _player,
-        uiContainerRef.current,
-        videoRef.current
-      );
-      setUi(__ui);
-    }
-    */
+    const __ui = new shaka.ui.Overlay(
+      _player,
+      uiContainerRef.current,
+      videoRef.current
+    );
+    const config_ui = {
+      'addSeekBar': true,
+      controlPanelElements: [
+      'play_pause',
+      'time_and_duration',
+      'spacer',
+      'mute',
+      'volume',
+      'fullscreen',
+      'overflow_menu',],
+      overflowMenuButtons: ['captions', 'quality', 'language', 'playback_rate'],
+      seekBarColors: {
+        base: 'rgba(255, 255, 255, 0.3)',
+        buffered: 'rgba(255, 255, 255, 0.54)',
+        played: 'rgb(255, 255, 255)',
+      }
+    };
+    __ui.configure(config_ui);
+    setUi(__ui);
     return () => {
       _player.destroy();
-      /*
       if (_ui) {
         _ui.destroy();
       }
-      */
     };
   }, []);
 
@@ -69,16 +82,14 @@ function ShakaPlayer({ src, config, className, ...rest }, ref) {
       get player() {
         return player;
       },
-      /*
       get ui() {
         return ui;
       },
-      */
-      get videoElement() {
+     get videoElement() {
         return videoRef.current;
       }
     }),
-    [player/*, ui*/]
+    [player, ui]
   );
 
   return (
@@ -90,7 +101,7 @@ function ShakaPlayer({ src, config, className, ...rest }, ref) {
           width: '100%'
         }}
         {...rest}
-        controls
+//        controls
       />
     </div>
   );

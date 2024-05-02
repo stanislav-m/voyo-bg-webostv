@@ -41,7 +41,7 @@ const GlobalState = ({ children }) => {
   const [voyo_map, setVoyo_map] = useState(initVal);
   const [groute, setRoute] = useState("home");
   const [auth, setAuth] = useState(authHC);
-  const [device, setDevice] = useState(true);
+  const [device, setDevice] = useState(false);
   const [credentials, setCredentials] = useState(null);
 
   const setAuthData = (new_auth) => {
